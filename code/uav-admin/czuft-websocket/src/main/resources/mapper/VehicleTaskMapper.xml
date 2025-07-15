@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.websocket.mapper.VehicleTaskMapper">
+
+    <resultMap type="UavVehicleTask" id="UavVehicleTaskResult">
+        <result property="vehicleTaskId" column="vehicle_task_id"/>
+        <result property="vehicleTaskName" column="vehicle_task_name"/>
+        <result property="vehicleTaskDatetime" column="vehicle_task_datetime"/>
+        <result property="vehicleId" column="vehicle_id"/>
+        <result property="sysId" column="sys_id"/>
+        <result property="vehicleTaskStatus" column="vehicle_task_status"/>
+        <result property="nextAction" column="next_action"/>
+        <result property="isAvailable" column="is_available"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectUavVehicleTaskVo">
+        select vehicle_task_id,
+               vehicle_task_name,
+               vehicle_task_datetime,
+               vehicle_id,
+               sys_id,
+               vehicle_task_status,
+               next_action,
+               is_available,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from uav_vehicle_task
+    </sql>
+
+    <select id="selectUavVehicleTaskList" parameterType="UavVehicleTask" resultMap="UavVehicleTaskResult">
+        <include refid="selectUavVehicleTaskVo"/>
+        <where>
+            <if test="vehicleTaskName != null  and vehicleTaskName != ''">and vehicle_task_name like concat('%',
+                #{vehicleTaskName}, '%')
+            </if>
+            <if test="vehicleTaskDatetime != null">and vehicle_task_datetime = #{vehicleTaskDatetime}</if>
+            <if test="vehicleId != null  and vehicleId != ''">and vehicle_id = #{vehicleId}</if>
+            <if test="sysId != null ">and sys_id = #{sysId}</if>
+            <if test="vehicleTaskStatus != null and vehicleTaskStatus != ''">and vehicle_task_status =
+                #{vehicleTaskStatus}
+            </if>
+            <if test="nextAction != null ">and next_action = #{nextAction}</if>
+            <if test="isAvailable != null  and isAvailable !=''">and is_available = #{isAvailable}</if>
+        </where>
+        order by create_time desc limit 1
+    </select>
+    <select id="selectUavVehicleTaskListByStatus" parameterType="UavVehicleTask" resultMap="UavVehicleTaskResult">
+        <include refid="selectUavVehicleTaskVo"/>
+        <where>
+            <if test="vehicleTaskStatus != null  and vehicleTaskStatus != ''">and vehicle_task_status =
+                #{vehicleTaskStatus}
+            </if>
+            <if test="isAvailable != null and isAvailable != ''">and is_available = #{isAvailable}</if>
+            <if test="vehicleTaskDatetime != null ">and date_format(vehicle_task_datetime,'%Y-%m-%d %H:%i:%s') &lt;=
+                date_format(#{vehicleTaskDatetime},'%Y-%m-%d %H:%i:%s')</if>
+        </where>
+    </select>
+
+    <select id="selectBeforeUavVehicleTaskList" parameterType="UavVehicleTask" resultMap="UavVehicleTaskResult">
+        <include refid="selectUavVehicleTaskVo"/>
+        <where>
+            <if test="vehicleTaskStatus != null  and vehicleTaskStatus != ''">and vehicle_task_status =
+                #{vehicleTaskStatus}
+            </if>
+            <if test="isAvailable != null and isAvailable != ''">and is_available = #{isAvailable}</if>
+            and DATE_SUB(vehicle_task_datetime, INTERVAL 2 MINUTE) &lt;= NOW()
+        </where>
+    </select>
+
+    <select id="selectUavVehicleTaskByVehicleTaskId" parameterType="Long" resultMap="UavVehicleTaskResult">
+        <include refid="selectUavVehicleTaskVo"/>
+        where vehicle_task_id = #{vehicleTaskId}
+    </select>
+
+
+    <update id="updateUavVehicleTask" parameterType="UavVehicleTask">
+        update uav_vehicle_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleTaskName != null and vehicleTaskName != ''">vehicle_task_name = #{vehicleTaskName},</if>
+            <if test="vehicleTaskDatetime != null">vehicle_task_datetime = #{vehicleTaskDatetime},</if>
+            <if test="vehicleId != null">vehicle_id= #{vehicleId},</if>
+            <if test="sysId != null">sys_id = #{sysId},</if>
+            <if test="vehicleTaskStatus != null and vehicleTaskStatus != ''">vehicle_task_status =
+                #{vehicleTaskStatus},
+            </if>
+            <if test="nextAction != null">next_action = #{nextAction},</if>
+            <if test="isAvailable != null and isAvailable !=''">is_available = #{isAvailable},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where vehicle_task_id = #{vehicleTaskId}
+    </update>
+
+</mapper>

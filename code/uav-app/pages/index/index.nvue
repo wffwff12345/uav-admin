@@ -1,0 +1,110 @@
+<template>
+	<view>
+		<map id="map" :latitude="latitude" :longitude="longitude" :style="`width: ${map.w}px;height: ${map.h}px;`"
+			enable-satellite="true" :polyline="polyline" :polygons="polygon" :show-compass="true"></map>
+	</view>
+</template>
+
+<script>
+	import { wgs84togcj02 } from '@/utils/map/map.js';
+	export default {
+		data() {
+			return {
+				latitude: null,
+				longitude: null,
+				map: {
+					w: getApp().globalData.screen.width,
+					h: getApp().globalData.screen.height
+				},
+				markers: [],
+				polyline: [{
+					points: [],
+					// color: "#ffff00",
+					arrowLine: true,
+					width: "20",
+				}],
+				polygon: [{
+					points: [{
+						latitude: 23.099994,
+						longitude: 113.324520,
+					}, {
+						latitude: 23.096994,
+						longitude: 113.329520,
+					}, {
+						latitude: 23.101555,
+						longitude: 113.329520,
+					}],
+					fillColor: "#00adb53d", //填充颜色
+					strokeColor: "#00adb5", //描边颜色
+					strokeWidth: 5, //描边宽度
+					zIndex: 1, //层级
+				}],
+				// 信息展开
+				infoObj: null,
+				infoSubNvue: null
+
+			}
+		},
+		onReady() {
+			uni.$on("menu", (item) => {
+				if (!this.infoObj || this.infoObj.id != item.id) {
+					/* 控制页面 */
+					if (item.id == 3) {
+						uni.navigateTo({ url: "/pages/ctrl/ctrl" })
+						return
+					}
+
+
+					this.infoObj = item
+					this.infoSubNvue.show('slide-in-right', 200, () => {
+						uni.$emit("info-msg", item);
+					})
+				} else {
+					this.infoObj = null
+					this.infoSubNvue.hide()
+				}
+			})
+			this.connectSocket()
+		},
+		onLoad() {
+			const menu = uni.getSubNVueById('menu');
+			menu.show('slide-in-left', 200, () => {})
+			this.infoSubNvue = uni.getSubNVueById('info');
+			this.infoSubNvue.hide()
+			// this.mockLine()
+		},
+		onUnload() {
+			console.log("onUnload....");
+			uni.$off("menu");
+		},
+		methods: {
+			connectSocket() {
+				var socketTask = uni.connectSocket({
+					url: 'ws://223.112.179.125:29031/websocket/web/2',
+					success: () => {
+						// uni.onSocketOpen(() => {
+						// 	console.log('WebSocket连接已打开！');
+						// });
+						uni.onSocketMessage((res) => {
+							let data = JSON.parse(res.data)
+							this.latitude = this.latitude || data.vehicleLat
+							this.longitude = this.longitude || data.vehicleLong
+							// 坐标转换
+							let pos = wgs84togcj02(data.vehicleLong, data.vehicleLat)
+							this.polyline[0].points.push(pos)
+							this.polyline = [...this.polyline]
+						});
+					},
+					complete: (res) => {},
+				});
+			},
+			mockLine() {
+				// this.polygon[0].points=[]
+			},
+
+		}
+	}
+</script>
+
+<style>
+</style>

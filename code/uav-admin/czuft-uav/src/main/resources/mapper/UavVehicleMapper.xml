@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.uav.admin.mapper.UavVehicleMapper">
+
+    <resultMap type="Vehicle" id="UavVehicleResult">
+        <result property="vehicleId" column="vehicle_id"/>
+        <result property="vehicleName" column="vehicle_name"/>
+        <result property="vehicleIp" column="vehicle_ip"/>
+        <result property="vehiclePort" column="vehicle_port"/>
+        <result property="vehicleRtsp" column="vehicle_rtsp"/>
+        <result property="vehicleGroupId" column="vehicle_group_id"/>
+        <result property="vehicleGroupName" column="vehicle_group_name"/>
+        <result property="vehicleOnlineStatus" column="vehicle_online_status"/>
+        <result property="vehicleStatus" column="vehicle_status"/>
+        <result property="sysId" column="sys_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectUavVehicleVo">
+        select vehicle_id,
+               vehicle_name,
+               vehicle_ip,
+               vehicle_port,
+               vehicle_rtsp,
+               vehicle_group_id,
+               vehicle_group_name,
+               vehicle_online_status,
+               vehicle_status,
+               sys_id,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from uav_vehicle
+    </sql>
+
+    <select id="selectUavVehicleList" parameterType="Vehicle" resultMap="UavVehicleResult">
+        <include refid="selectUavVehicleVo"/>
+        <where>
+            <if test="vehicleName != null  and vehicleName != ''">and vehicle_name like concat('%', #{vehicleName},
+                '%')
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%y%m%d %T') &gt;= date_format(#{params.beginTime},'%y%m%d %T')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%y%m%d %T') &lt;= date_format(#{params.endTime},'%y%m%d %T')
+            </if>
+            <if test="vehicleGroupName != null and vehicleGroupName != ''">and vehicle_group_name like concat('%',
+                #{vehicleGroupName}, '%')
+            </if>
+            <if test="vehicleStatus != null and vehicleStatus != ''">and vehicle_status = #{vehicleStatus}
+            </if>
+            <if test="vehicleOnlineStatus != null and vehicleOnlineStatus != ''">and vehicle_online_status =
+                #{vehicleOnlineStatus}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUavVehicleByVehicleId" parameterType="Long" resultMap="UavVehicleResult">
+        <include refid="selectUavVehicleVo"/>
+        where vehicle_id = #{vehicleId}
+    </select>
+
+    <insert id="insertUavVehicle" parameterType="Vehicle" useGeneratedKeys="true" keyProperty="vehicleId">
+        insert into uav_vehicle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vehicleName != null and vehicleName != ''">vehicle_name,</if>
+            <if test="vehicleIp != null and vehicleIp != ''">vehicle_ip,</if>
+            <if test="vehiclePort != null and vehiclePort != ''">vehicle_port,</if>
+            <if test="vehicleRtsp != null and vehicleRtsp != ''">vehicle_rtsp,</if>
+            <if test="vehicleGroupId != null and vehicleGroupId != ''">vehicle_group_id,</if>
+            <if test="vehicleGroupName != null and vehicleGroupName != ''">vehicle_group_name,</if>
+            <if test="vehicleOnlineStatus != null and vehicleOnlineStatus != ''">vehicle_online_status,</if>
+            <if test="vehicleStatus != null and vehicleStatus != ''">vehicle_status,</if>
+            <if test="sysId != null">sys_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vehicleName != null and vehicleName != ''">#{vehicleName},</if>
+            <if test="vehicleIp != null and vehicleIp != ''">#{vehicleIp},</if>
+            <if test="vehiclePort != null and vehiclePort != ''">#{vehiclePort},</if>
+            <if test="vehicleRtsp != null and vehicleRtsp != ''">#{vehicleRtsp},</if>
+            <if test="vehicleGroupId != null and vehicleGroupId != ''">#{vehicleGroupId},</if>
+            <if test="vehicleGroupName != null and vehicleGroupName != ''">#{vehicleGroupName},</if>
+            <if test="vehicleOnlineStatus != null and vehicleOnlineStatus != ''">#{vehicleOnlineStatus},</if>
+            <if test="vehicleStatus != null and vehicleStatus != ''">#{vehicleStatus},</if>
+            <if test="sysId != null">#{sysId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateUavVehicle" parameterType="Vehicle">
+        update uav_vehicle
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleName != null">vehicle_name = #{vehicleName},</if>
+            <if test="vehicleIp != null">vehicle_ip = #{vehicleIp},</if>
+            <if test="vehiclePort != null">vehicle_port = #{vehiclePort},</if>
+            <if test="vehicleRtsp != null">vehicle_rtsp = #{vehicleRtsp},</if>
+            <if test="vehicleGroupId != null">vehicle_group_id = #{vehicleGroupId},</if>
+            <if test="vehicleGroupName != null">vehicle_group_name = #{vehicleGroupName},</if>
+            <if test="vehicleStatus != null">vehicle_status = #{vehicleStatus},</if>
+            <if test="vehicleOnlineStatus != null">vehicle_online_status = #{vehicleOnlineStatus},</if>
+            <if test="sysId != null">sys_id = #{sysId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where vehicle_id = #{vehicleId}
+    </update>
+
+    <delete id="deleteUavVehicleByVehicleId" parameterType="Long">
+        delete
+        from uav_vehicle
+        where vehicle_id = #{vehicleId}
+    </delete>
+
+    <delete id="deleteUavVehicleByVehicleIds" parameterType="String">
+        delete from uav_vehicle where vehicle_id in
+        <foreach item="vehicleId" collection="array" open="(" separator="," close=")">
+            #{vehicleId}
+        </foreach>
+    </delete>
+</mapper>

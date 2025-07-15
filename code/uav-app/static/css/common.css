@@ -1,0 +1,86 @@
+.a-center {
+	align-items: center;
+}
+
+.flex {
+	/* #ifdef APP-VUE */
+	display: flex;
+	/* #endif */
+	/* #ifdef APP-NVUE */
+	flex-direction: row;
+	/* #endif */
+}
+
+.j-center {
+	justify-content: center;
+}
+
+.main-bg-color {
+	background-color: #222831;
+}
+
+.sub-bg-color1 {
+	background-color: #393e46;
+}
+
+.sub-bg-color2 {
+	background-color: #00adb5;
+}
+
+.btn {
+	padding: 5rpx;
+	border-radius: 5rpx;
+}
+
+.btn:active {
+	background-color: #393e46;
+	border-radius: 5rpx;
+}
+
+.mb-5 {
+	margin-bottom: 5rpx;
+}
+
+.m-tb {
+	margin-top: 10rpx;
+	margin-bottom: 10rpx;
+}
+
+.m-tb-5 {
+	margin-top: 5rpx;
+	margin-bottom: 5rpx;
+}
+
+
+.m-lr-5 {
+	margin-left: 5rpx;
+	margin-right: 5rpx;
+}
+
+.m-10{
+	margin: 10rpx;
+}
+
+
+.p-10 {
+	padding: 10rpx;
+}
+
+
+
+
+
+
+
+.font-15 {
+	font-size: 15rpx;
+}
+
+.text-white {
+	color: white;
+}
+
+
+.radius-10 {
+	border-radius: 10rpx;
+}

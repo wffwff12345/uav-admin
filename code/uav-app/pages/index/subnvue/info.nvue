@@ -1,0 +1,27 @@
+<template>
+	<view class="radius-10 main-bg-color p-10">
+		<view class="flex a-center j-center">
+			<text class="text-white">{{title}}</text>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				title: ""
+			}
+		},
+		onLoad() {
+			// 监听事件  
+			uni.$on('info-msg', (res) => {
+				this.title = res.name
+			})
+		}
+	}
+</script>
+
+<style>
+
+</style>

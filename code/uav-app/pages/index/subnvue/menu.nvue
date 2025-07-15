@@ -1,0 +1,67 @@
+<template>
+	<view :style="`height:${menuH}px`" :class="expand?'expand-on':'expand-off'">
+		<view class="expand-btn main-bg-color" :style="`top: ${menuH/2-30}px;`" @tap="onExpand">
+			<text class="text-white" style="padding-right: 5rpx;"> || </text>
+		</view>
+
+		<list class="main-bg-color radius-10" style="width: 77rpx;" show-scrollbar="false">
+			<!-- 注意事项: 不能使用 index 作为 key 的唯一标识 -->
+			<cell v-for="(item, index) in dataList" :key="item.id" class="flex a-center j-center">
+				<view class="m-tb-5 a-center btn" @tap="onMenu(item)">
+					<image src="/static/imgs/menus/device.png" style="width: 45rpx;height: 45rpx;" class="mb-5" />
+					<text class="text-white font-15">{{item.name}}</text>
+				</view>
+			</cell>
+		</list>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				dataList: [
+					{ id: "1", name: '任务进度' },
+					{ id: "2", name: '巡逻规划' },
+					{ id: "3", name: '控制' },
+					{ id: "4", name: '其他' },
+					{ id: "5", name: '退出' }
+				],
+				menuH: getApp().globalData.screen.height,
+				expand: true
+			}
+		},
+		methods: {
+			onExpand() {
+				setTimeout(() => {
+					this.expand = !this.expand
+				}, 100)
+			},
+			onMenu(item) {
+				uni.$emit("menu", item)
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	.expand-btn {
+		width: 96rpx;
+		height: 60px;
+		border-radius: 20rpx;
+		position: absolute;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-end;
+	}
+
+	.expand-off {
+		transform: translateX(-77rpx);
+		transition: transform 0.3s linear;
+	}
+
+	.expand-on {
+		transform: translateX(0px);
+		transition: transform 0.3s linear;
+	}
+</style>

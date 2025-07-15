@@ -1,0 +1,63 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"navigationStyle": "custom",
+				"app-plus": {
+
+					"subNVues": [{
+							"id": "menu",
+							"path": "pages/index/subnvue/menu", // 页面路径  
+							"style": {
+								"position": "absolute",
+								"left": "0",
+								"width": "100rpx",
+								"height": "100%",
+								"background": "transparent"
+							}
+						},
+						{
+							"id": "info",
+							"path": "pages/index/subnvue/info", // 页面路径  
+							"style": {
+								"position": "absolute",
+								"right": "0",
+								"width": "350rpx",
+								"height": "100%",
+								"background": "transparent"
+							}
+						}
+					]
+				}
+			}
+		},
+		{
+			"path": "pages/index/subnvue/menu",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/ctrl/ctrl",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"pageOrientation": "landscape",
+		"app-plus": {
+			"bounce": "none"
+		}
+	},
+	"uniIdRouter": {}
+}

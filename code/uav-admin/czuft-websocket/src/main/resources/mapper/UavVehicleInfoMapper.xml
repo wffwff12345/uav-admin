@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.websocket.mapper.WebUavVehicleInfoMapper">
+    <insert id="saveBatch">
+        insert into
+        uav_vehicle_info(sys_id,ground_speed,soc,lng,lat,alt,fly_in_air,head_angle,gps_status,satellite_count,mode,create_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.sysId},#{item.groundSpeed},
+            #{item.soc},#{item.lng},
+            #{item.lat},#{item.alt},
+            #{item.flyInAir},#{item.headAngle},
+            #{item.gpsStatus},#{item.satCount},
+            #{item.mode},#{item.createTime})
+        </foreach>
+    </insert>
+</mapper>

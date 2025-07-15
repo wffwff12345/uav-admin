@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.uav.admin.mapper.UavVehicleTaskItemMapper">
+
+    <resultMap type="UavVehicleTaskItem" id="UavVehicleTaskItemResult">
+        <result property="vehicleTaskItemId"    column="vehicle_task_item_id"    />
+        <result property="vehicleTaskItem"    column="vehicle_task_item"    />
+        <result property="vehicleTaskId"    column="vehicle_task_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectUavVehicleTaskItemVo">
+        select vehicle_task_item_id, vehicle_task_item, vehicle_task_id, create_by, create_time, update_by, update_time, remark from uav_vehicle_task_item
+    </sql>
+
+    <select id="selectUavVehicleTaskItemList" parameterType="UavVehicleTaskItem" resultMap="UavVehicleTaskItemResult">
+        <include refid="selectUavVehicleTaskItemVo"/>
+        <where>
+            <if test="vehicleTaskItem != null  and vehicleTaskItem != ''"> and vehicle_task_item = #{vehicleTaskItem}</if>
+            <if test="vehicleTaskId != null "> and vehicle_task_id = #{vehicleTaskId}</if>
+        </where>
+    </select>
+
+    <select id="selectUavVehicleTaskItemByVehicleTaskItemId" parameterType="Long" resultMap="UavVehicleTaskItemResult">
+        <include refid="selectUavVehicleTaskItemVo"/>
+        where vehicle_task_item_id = #{vehicleTaskItemId}
+    </select>
+
+    <insert id="insertUavVehicleTaskItem" parameterType="UavVehicleTaskItem" useGeneratedKeys="true" keyProperty="vehicleTaskItemId">
+        insert into uav_vehicle_task_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vehicleTaskItem != null and vehicleTaskItem != ''">vehicle_task_item,</if>
+            <if test="vehicleTaskId != null">vehicle_task_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vehicleTaskItem != null and vehicleTaskItem != ''">#{vehicleTaskItem},</if>
+            <if test="vehicleTaskId != null">#{vehicleTaskId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateUavVehicleTaskItem" parameterType="UavVehicleTaskItem">
+        update uav_vehicle_task_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vehicleTaskItem != null and vehicleTaskItem != ''">vehicle_task_item = #{vehicleTaskItem},</if>
+            <if test="vehicleTaskId != null">vehicle_task_id = #{vehicleTaskId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where vehicle_task_item_id = #{vehicleTaskItemId}
+    </update>
+
+    <delete id="deleteUavVehicleTaskItemByVehicleTaskItemId" parameterType="Long">
+        delete from uav_vehicle_task_item where vehicle_task_item_id = #{vehicleTaskItemId}
+    </delete>
+
+    <delete id="deleteUavVehicleTaskItemByVehicleTaskItemIds" parameterType="String">
+        delete from uav_vehicle_task_item where vehicle_task_item_id in
+        <foreach item="vehicleTaskItemId" collection="array" open="(" separator="," close=")">
+            #{vehicleTaskItemId}
+        </foreach>
+    </delete>
+    <insert id="insertUavVehicleTaskItems">
+        insert into
+        uav_vehicle_task_item(vehicle_task_item,vehicle_task_id,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.vehicleTaskItem},#{item.vehicleTaskId},
+            #{item.createBy},
+            #{item.createTime},#{item.updateBy},
+            #{item.updateTime},#{item.remark})
+        </foreach>
+    </insert>
+</mapper>
