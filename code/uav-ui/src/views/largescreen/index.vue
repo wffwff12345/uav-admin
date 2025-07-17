@@ -45,7 +45,7 @@
 
 <script>
 import Screenfull from '@/components/Screenfull'
-import UavCard from './components/UavCard.vue'
+import UavCard from './components/uavCard.vue'
 import MonitorWindow from './components/MonitorWindow' // 视频组件
 import CustomCard from './components/customCard.vue'
 export default {
