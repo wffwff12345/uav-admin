@@ -88,10 +88,5 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
             <version>2.7.8</version>
         </dependency>
-        <dependency>
-            <groupId>com.freedom</groupId>
-            <artifactId>care</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 </project>
