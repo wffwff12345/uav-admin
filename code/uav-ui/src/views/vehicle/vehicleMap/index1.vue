@@ -31,7 +31,7 @@ export default {
         paths: []
       },
       // WebSocket服务器地址
-      webSocketServerUrl: 'ws://223.112.179.125:38080/',
+      webSocketServerUrl: 'ws://10.1.2.45:28080/',
       socket: null,
       points: [],
       startPoint: { lon: 119.9927, lat: 31.811863 },

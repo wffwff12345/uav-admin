@@ -87,7 +87,7 @@ public class WebSocketMsgServiceImpl implements IWebSocketMsgService {
     public void handleMessage(String message, Session session) {
         try {
             VehicleInfo vehicle = JSONHelper.parse(message, VehicleInfo.class);
-            sendMessage(vehicle.getSysId(), message);
+            sendMessage(vehicle.getSysId(), SocketMethod.VEHICLE.value() + "#" + message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -225,7 +225,6 @@ public class WebSocketMsgServiceImpl implements IWebSocketMsgService {
             if (sysId == 0) {
                 return;
             }
-            message = "vehicle#" + message;
             WebSocketAppServer.sendMessageByMac(sysId, message);
             WebSocketWebServer.sendMessageByMac(sysId, message);
             NewWebSocketServer.sendAllMessage(message);
